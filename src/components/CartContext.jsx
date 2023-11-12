@@ -12,14 +12,11 @@ export default function CartContextProvider({ children }) {
 
 	const handleAddToCart = mealData => {
 		const mealId = mealData.id
-		setMealQuantity(prevQuantity => ({
-			...prevQuantity,
-			[mealId]: prevQuantity[mealId] + 1,
-		}))
 		setCart(prevCart => {
 			return {
 				...prevCart,
 				[mealId]: {
+					mealId,
 					mealName: mealData.name,
 					mealPrice: mealData.price,
 					mealQuantity: totalQuantity[mealId],

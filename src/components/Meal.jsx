@@ -1,14 +1,13 @@
 import React, { useContext, useState } from 'react'
 import { CartContext } from './CartContext'
 
-export default function Meal({ mealData, cart, setCart }) {
-	const [mealQuantity, setMealQuantity] = useState(0)
+export default function Meal({ mealData }) {
 	const cartCtx = useContext(CartContext)
-
+	let quantity = 1
 	const handleAddToCart = () => {
-		setMealQuantity(prevQuantity => prevQuantity + 1)
 		cartCtx.addItemToCart(mealData)
-		cartCtx.updateQuantity(mealQuantity, mealData.id)
+		cartCtx.updateQuantity(quantity, mealData.id)
+		quantity++
 	}
 
 	return (
