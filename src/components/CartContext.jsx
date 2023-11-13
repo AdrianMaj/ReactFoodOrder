@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from 'react'
+import React, { createContext, useState } from 'react'
 
 export const CartContext = createContext({
 	meals: {},
@@ -8,10 +8,20 @@ export const CartContext = createContext({
 
 export default function CartContextProvider({ children }) {
 	const [cart, setCart] = useState({})
-	const [totalQuantity, setTotalQuantity] = useState({})
+	const [quantities, setQuantities] = useState({})
 
+	const handleAddQuantity = mealId => {
+		setQuantities(prevQuantities => {
+			const updatedQuantity = (prevQuantities[mealId] || 0) + 1
+			return {
+				...prevQuantities,
+				[mealId]: updatedQuantity,
+			}
+		})
+	}
 	const handleAddToCart = mealData => {
 		const mealId = mealData.id
+		handleAddQuantity(mealId)
 		setCart(prevCart => {
 			return {
 				...prevCart,
@@ -19,21 +29,15 @@ export default function CartContextProvider({ children }) {
 					mealId,
 					mealName: mealData.name,
 					mealPrice: mealData.price,
-					mealQuantity: totalQuantity[mealId],
+					mealQuantity: quantities[mealId],
 				},
 			}
 		})
-		console.log(cart)
 	}
 	const ctxValue = {
 		meals: cart,
-		updateQuantity: (quantity, id) => {
-			setTotalQuantity(prevQuantity => {
-				return {
-					...prevQuantity,
-					[id]: quantity,
-				}
-			})
+		updateQuantity: mealId => {
+			handleAddQuantity(mealId)
 		},
 		addItemToCart: mealData => {
 			handleAddToCart(mealData)

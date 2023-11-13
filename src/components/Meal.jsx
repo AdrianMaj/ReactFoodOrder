@@ -3,11 +3,9 @@ import { CartContext } from './CartContext'
 
 export default function Meal({ mealData }) {
 	const cartCtx = useContext(CartContext)
-	let quantity = 1
+
 	const handleAddToCart = () => {
 		cartCtx.addItemToCart(mealData)
-		cartCtx.updateQuantity(quantity, mealData.id)
-		quantity++
 	}
 
 	return (
