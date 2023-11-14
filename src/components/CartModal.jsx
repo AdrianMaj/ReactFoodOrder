@@ -9,10 +9,9 @@ export default function CartModal() {
 	const cartData = Object.values(cartCtx.meals)
 
 	const cartElements = cartData.map(cartElementData => {
-		// console.log(cartElementData)
-		const elementPrice = +cartElementData.mealPrice * +cartElementData.mealQuantity
+		const elementPrice = +cartElementData.price * +cartElementData.mealQuantity
 		totalPrice += elementPrice
-		return <CartModalItem key={cartElementData.mealId} data={cartElementData} />
+		return <CartModalItem key={Math.random()} data={cartElementData} />
 	})
 
 	return createPortal(

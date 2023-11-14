@@ -5,7 +5,8 @@ export default function Meal({ mealData }) {
 	const cartCtx = useContext(CartContext)
 
 	const handleAddToCart = () => {
-		cartCtx.addItemToCart(mealData)
+		// console.log(mealData)
+		cartCtx.handleItemToCart(mealData, true)
 	}
 
 	return (
