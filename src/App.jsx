@@ -6,8 +6,8 @@ import MealsList from './components/MealsList'
 function App() {
 	return (
 		<>
-			<Header />
 			<CartContextProvider>
+				<Header />
 				<CartModal />
 				<MealsList />
 			</CartContextProvider>

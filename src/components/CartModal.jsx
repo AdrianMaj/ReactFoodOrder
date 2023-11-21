@@ -2,6 +2,9 @@ import React, { useContext, useState } from 'react'
 import { createPortal } from 'react-dom'
 import CartModalItem from './CartModalItem'
 import { CartContext } from './CartContext'
+import CheckoutForm from './CheckoutForm'
+import CartInformation from './CartInformation'
+import CartSuccess from './CartSuccess'
 
 export default function CartModal() {
 	const cartCtx = useContext(CartContext)
@@ -13,16 +16,47 @@ export default function CartModal() {
 		totalPrice += elementPrice
 		return <CartModalItem key={Math.random()} data={cartElementData} />
 	})
+	const handleCloseModal = () => {
+		cartCtx.modal.current.close()
+	}
+
+	const handleFormSubmission = e => {
+		e.preventDefault()
+		console.log(e.target)
+		const fd = new FormData(e.target)
+		console.log(fd.get('full-name'))
+		// send to backend
+		cartCtx.setCart({})
+		cartCtx.setQuantities({})
+		setModalWindow(2)
+	}
+
+	const [modalWindow, setModalWindow] = useState(0)
+	let modalContent
+	if (modalWindow === 0) {
+		modalContent = (
+			<CartInformation
+				cartElements={cartElements}
+				price={totalPrice.toFixed(2)}
+				handleCloseModal={handleCloseModal}
+				setModalWindow={setModalWindow}
+			/>
+		)
+	} else if (modalWindow === 1) {
+		modalContent = (
+			<CheckoutForm
+				price={totalPrice.toFixed(2)}
+				handleFormSubmission={handleFormSubmission}
+				handleCloseModal={handleCloseModal}
+			/>
+		)
+	} else if (modalWindow === 2) {
+		modalContent = <CartSuccess handleCloseModal={handleCloseModal} setModalWindow={setModalWindow} />
+	}
 
 	return createPortal(
-		<dialog open className="cart modal">
-			<h2>Your Cart</h2>
-			<ul>{cartElements}</ul>
-			<div className="cart-total">${totalPrice.toFixed(2)}</div>
-			<div className="modal-actions">
-				<button className="text-button">Close</button>
-				<button className="button">Go to Checkout</button>
-			</div>
+		<dialog ref={cartCtx.modal} className="cart modal">
+			{modalContent}
 		</dialog>,
 		document.querySelector('#modal')
 	)
