@@ -1,4 +1,4 @@
-# React Food Order App <a href="https://react.dev/" target="_blank" rel="noopener"><img alt='React Icon' height="30px" width="30px" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" /></a>
+# <a href="https://react.dev/" target="_blank" rel="noopener"><img alt='React Icon' height="30px" width="30px" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" /></a> React Food Order App 
 
 This is project from Maximillian Schwarzmuller's Academind React Course. I took it as a challenge and made it myself from scratch only using some ready CSS and backend that was provided in the course.
 
