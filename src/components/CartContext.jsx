@@ -1,4 +1,4 @@
-import React, { createContext, useState, useRef } from 'react'
+import React, { createContext, useState, useRef, useEffect } from 'react'
 
 export const CartContext = createContext({
 	meals: {},
@@ -15,6 +15,12 @@ export default function CartContextProvider({ children }) {
 	const [totalQuantity, setTotalQuantity] = useState(0)
 	const modal = useRef()
 
+	useEffect(() => {
+		const quantityArray = Object.values(quantities)
+		const total = quantityArray.reduce((prevSum, quantity) => prevSum + quantity, 0)
+		setTotalQuantity(total)
+	}, [quantities])
+
 	const handleAddQuantity = (mealId, add) => {
 		setQuantities(prevQuantities => {
 			let updatedQuantity
@@ -28,9 +34,6 @@ export default function CartContextProvider({ children }) {
 				[mealId]: updatedQuantity,
 			}
 		})
-		const quantityArray = Object.values(quantities)
-		const total = quantityArray.reduce((prevSum, quantity) => prevSum + quantity, 0)
-		setTotalQuantity(total)
 	}
 	const handleItemToCart = (mealData, add) => {
 		const mealId = mealData.id
