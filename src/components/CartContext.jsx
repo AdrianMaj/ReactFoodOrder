@@ -21,7 +21,7 @@ export default function CartContextProvider({ children }) {
 		setTotalQuantity(total)
 	}, [quantities])
 
-	const handleAddQuantity = (mealId, add) => {
+	const handleAddQuantity = (mealId, add, passQuantities) => {
 		setQuantities(prevQuantities => {
 			let updatedQuantity
 			if (add) {
@@ -29,27 +29,33 @@ export default function CartContextProvider({ children }) {
 			} else if (!add) {
 				updatedQuantity = prevQuantities[mealId] ? +prevQuantities[mealId] - 1 : 0
 			}
-			return {
+			const updatedQuantities = {
 				...prevQuantities,
 				[mealId]: updatedQuantity,
 			}
+			passQuantities(updatedQuantities)
+			return updatedQuantities
 		})
 	}
+
 	const handleItemToCart = (mealData, add) => {
 		const mealId = mealData.id
-		handleAddQuantity(mealId, add)
-		setCart(prevCart => {
-			return {
-				...prevCart,
-				[mealId]: {
-					id: mealId,
-					name: mealData.name,
-					price: mealData.price,
-					mealQuantity: quantities[mealId],
-				},
-			}
+		handleAddQuantity(mealId, add, updatedQuantities => {
+			setCart(prevCart => {
+				return {
+					...prevCart,
+					[mealId]: {
+						id: mealId,
+						name: mealData.name,
+						price: mealData.price,
+						mealQuantity: updatedQuantities[mealId],
+					},
+				}
+			})
 		})
 	}
+
+	
 	const ctxValue = {
 		meals: cart,
 		handleItemToCart: (mealData, add) => {

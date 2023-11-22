@@ -19,13 +19,38 @@ export default function CartModal() {
 	const handleCloseModal = () => {
 		cartCtx.modal.current.close()
 	}
+	async function sendOrder(order) {
+		try {
+			const response = await fetch('http://localhost:3000/orders', {
+				method: 'POST',
+				body: JSON.stringify({
+					order: order,
+				}),
+				headers: {
+					'Content-type': 'application/json; charset=UTF-8',
+				},
+			})
+			const resData = await response.json()
+			console.log(resData)
+		} catch (error) {
+			console.log('Error' + error.message)
+		}
+	}
 
 	const handleFormSubmission = e => {
 		e.preventDefault()
-		console.log(e.target)
 		const fd = new FormData(e.target)
-		console.log(fd.get('full-name'))
-		// send to backend
+		const order = {
+			items: cartCtx.meals,
+			customer: {
+				email: fd.get('email'),
+				name: fd.get('full-name'),
+				street: fd.get('street'),
+				['postal-code']: fd.get('postal'),
+				city: fd.get('city'),
+			},
+		}
+		sendOrder(order)
 		cartCtx.setCart({})
 		cartCtx.setQuantities({})
 		setModalWindow(2)
